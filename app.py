@@ -64,10 +64,7 @@ class Seafoam(Base):
 
 seafoam = Seafoam()
 
-# title = "Image to 3D mesh"
-
 with gr.Blocks(theme=seafoam) as demo:
-    # gr.Markdown(title)
     create_im_to_3d_demo(model)
 print("Demo is running")
 demo.launch(server_name="0.0.0.0")
