@@ -58,7 +58,7 @@ def create_demo(model):
                                                  1.0, 1.0, 1.0, 1.0])
     
     checkbox = gr.Checkbox(label="Keep occlusion edges", value=False)
-    submit = gr.Button("Submit", css=".gradio-button {background-color: blue; color: white}", variant="primary")
+    submit = gr.Button("Submit", variant="primary")
     submit.click(partial(get_mesh, model), inputs=[image, checkbox], outputs=[result])
     examples = gr.Examples(examples=["examples/example1.png", "examples/example2.png", "examples/example3.png", "examples/example4.png", "examples/example5.png"],
                             inputs=[image])
