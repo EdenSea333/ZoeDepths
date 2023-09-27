@@ -47,19 +47,19 @@ class Seafoam(Base):
             font_mono=font_mono,
         )
         super().set(
-            body_background_fill="rgb(0,0,0)",
-            body_background_fill_dark="",
-            button_primary_background_fill="",
-            button_primary_background_fill_hover="",
-            button_primary_text_color="white",
-            button_primary_background_fill_dark="",
-            slider_color="*secondary_300",
-            slider_color_dark="*secondary_600",
-            block_title_text_weight="600",
-            block_border_width="3px",
-            block_shadow="*shadow_drop_lg",
-            button_shadow="*shadow_drop_lg",
-            button_large_padding="10px",
+            body_text_color="#FFFFFF",
+            body_background_fill="#FF0064",
+            block_background_fill="#1C1C1C",
+            block_label_text_color="#FFFFFF",
+            block_label_background_fill="#2C2C2C",
+            block_border_color="#00000000",
+            button_primary_background_fill="#1C1C1C",
+            button_primary_text_color="#FFFFFF",
+            error_background_fill="#1C1C1C",
+            error_border_color="#FFFFFF",
+            error_text_color="#FFFFFF",
+            checkbox_label_border_color="#FF0000",
+            border_color_primary="#2C2C2C",
         )
 
 seafoam = Seafoam()
