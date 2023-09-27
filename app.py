@@ -52,7 +52,6 @@ class Seafoam(Base):
             block_background_fill="#1C1C1C",
             block_label_text_color="#FFFFFF",
             block_label_background_fill="#2C2C2C",
-            block_label_border_width=None,
             block_border_color="#00000000",
             button_primary_background_fill="#1C1C1C",
             button_primary_text_color="#FFFFFF",
