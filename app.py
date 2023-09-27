@@ -52,6 +52,7 @@ class Seafoam(Base):
             block_background_fill="#1C1C1C",
             block_label_text_color="#FFFFFF",
             block_label_background_fill="#2C2C2C",
+            block_label_border_width=None,
             block_border_color="#00000000",
             button_primary_background_fill="#1C1C1C",
             button_primary_text_color="#FFFFFF",
@@ -59,7 +60,10 @@ class Seafoam(Base):
             error_border_color="#FFFFFF",
             error_text_color="#FFFFFF",
             checkbox_label_border_color="#FF0000",
+            checkbox_background_color="#FFFFFF",
             border_color_primary="#2C2C2C",
+            background_fill_primary="#111111",
+            button_secondary_border_color="#111111",
         )
 
 seafoam = Seafoam()
