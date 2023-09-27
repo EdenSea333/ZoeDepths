@@ -19,7 +19,6 @@ class Seafoam(Base):
         spacing_size: sizes.Size | str = sizes.spacing_md,
         radius_size: sizes.Size | str = sizes.radius_md,
         text_size: sizes.Size | str = sizes.text_lg,
-        text_color: colors.Color | str = colors.red,
         font: fonts.Font
         | str
         | Iterable[fonts.Font | str] = (
