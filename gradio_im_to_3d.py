@@ -52,16 +52,13 @@ def get_mesh(model, image, keep_edges=False):
     return glb_path
 
 def create_demo(model):
-    # gr.Markdown("### Image to 3D mesh")
-    gr.Markdown("Convert a single 2D image to a 3D mesh")
-
     with gr.Row():
         image = gr.Image(label="Input Image", type='pil')
         result = gr.Model3D(label="3d mesh reconstruction", clear_color=[
                                                  1.0, 1.0, 1.0, 1.0])
     
     checkbox = gr.Checkbox(label="Keep occlusion edges", value=False)
-    submit = gr.Button("Submit")
+    submit = gr.Button("Submit", css=".gradio-button {background-color: blue; color: white}", variant="primary")
     submit.click(partial(get_mesh, model), inputs=[image, checkbox], outputs=[result])
     examples = gr.Examples(examples=["examples/example1.png", "examples/example2.png", "examples/example3.png", "examples/example4.png", "examples/example5.png"],
                             inputs=[image])
