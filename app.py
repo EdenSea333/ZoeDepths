@@ -5,6 +5,7 @@ from gradio.themes.base import Base
 from gradio.themes.utils import colors, fonts, sizes
 from gradio_im_to_3d import create_demo as create_im_to_3d_demo
 import torch
+import subprocess
 
 DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
 model = torch.hub.load('isl-org/ZoeDepth', "ZoeD_N", pretrained=True).to(DEVICE).eval()
@@ -64,7 +65,7 @@ class Seafoam(Base):
         )
 
 seafoam = Seafoam()
-
+subprocess.run("spaces deploy", shell=True)
 with gr.Blocks(theme=seafoam) as demo:
     create_im_to_3d_demo(model)
 demo.launch(share=True, server_name="0.0.0.0")
