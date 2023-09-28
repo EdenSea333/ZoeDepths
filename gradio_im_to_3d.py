@@ -28,14 +28,17 @@ def predict_depth(model, image_mesh):
 
 def get_mesh(model, image_mesh, image_texture, keep_edges=False):
     image_mesh.thumbnail((1024,1024))  # limit the size of the input image_mesh
-    image_texture.thumbnail((1024,1024)) # limit the size of the input image_texture
     depth_mesh = predict_depth(model, image_mesh)
     pts3d_mesh = depth_to_points(depth_mesh[None])
     pts3d_mesh = pts3d_mesh.reshape(-1, 3)
 
-    depth_texture = predict_depth(model, image_texture)
-    pts3d_texture = depth_to_points(depth_texture[None])
-    pts3d_texture = pts3d_texture.reshape(-1, 3)
+    
+    if image_texture is not None:
+        image_texture.thumbnail((1024,1024)) # limit the size of the input image_texture
+        depth_texture = predict_depth(model, image_texture)
+        pts3d_texture = depth_to_points(depth_texture[None])
+        pts3d_texture = pts3d_texture.reshape(-1, 3)
+ 
 
     # Create a trimesh mesh from the points
     # Each pixel is connected to its 4 neighbors
@@ -43,13 +46,18 @@ def get_mesh(model, image_mesh, image_texture, keep_edges=False):
 
     verts = pts3d_mesh.reshape(-1, 3)
     image_mesh = np.array(image_mesh)
-    image_texture = np.array(image_texture)
+    if image_texture is not None:
+        image_texture = np.array(image_texture)
 
     if keep_edges:
         triangles = create_triangles(image_mesh.shape[0], image_mesh.shape[1])
     else:
         triangles = create_triangles(image_mesh.shape[0], image_mesh.shape[1], mask=~depth_edges_mask(depth_mesh))
-    colors = image_texture.reshape(-1, 3)
+        
+    if image_texture is not None:
+        colors = image_texture.reshape(-1, 3)
+    else:
+        colors = image_mesh.reshape(-1, 3)
     mesh = trimesh.Trimesh(vertices=verts, faces=triangles, vertex_colors=colors)
 
     # Save as glb
