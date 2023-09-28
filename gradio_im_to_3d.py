@@ -22,27 +22,34 @@ def depth_edges_mask(depth):
     return mask
 
 
-def predict_depth(model, image):
-    depth = model.infer_pil(image)
+def predict_depth(model, image_mesh):
+    depth = model.infer_pil(image_mesh)
     return depth
 
-def get_mesh(model, image, keep_edges=False):
-    image.thumbnail((1024,1024))  # limit the size of the input image
-    depth = predict_depth(model, image)
-    pts3d = depth_to_points(depth[None])
-    pts3d = pts3d.reshape(-1, 3)
+def get_mesh(model, image_mesh, image_texture, keep_edges=False):
+    image_mesh.thumbnail((1024,1024))  # limit the size of the input image_mesh
+    image_texture.thumbnail((1024,1024)) # limit the size of the input image_texture
+    depth_mesh = predict_depth(model, image_mesh)
+    pts3d_mesh = depth_to_points(depth_mesh[None])
+    pts3d_mesh = pts3d_mesh.reshape(-1, 3)
+
+    depth_texture = predict_depth(model, image_texture)
+    pts3d_texture = depth_to_points(depth_texture[None])
+    pts3d_texture = pts3d_texture.reshape(-1, 3)
 
     # Create a trimesh mesh from the points
     # Each pixel is connected to its 4 neighbors
     # colors are the RGB values of the image
 
-    verts = pts3d.reshape(-1, 3)
-    image = np.array(image)
+    verts = pts3d_mesh.reshape(-1, 3)
+    image_mesh = np.array(image_mesh)
+    image_texture = np.array(image_texture)
+
     if keep_edges:
-        triangles = create_triangles(image.shape[0], image.shape[1])
+        triangles = create_triangles(image_mesh.shape[0], image_mesh.shape[1])
     else:
-        triangles = create_triangles(image.shape[0], image.shape[1], mask=~depth_edges_mask(depth))
-    colors = image.reshape(-1, 3)
+        triangles = create_triangles(image_mesh.shape[0], image_mesh.shape[1], mask=~depth_edges_mask(depth_mesh))
+    colors = image_texture.reshape(-1, 3)
     mesh = trimesh.Trimesh(vertices=verts, faces=triangles, vertex_colors=colors)
 
     # Save as glb
@@ -53,13 +60,13 @@ def get_mesh(model, image, keep_edges=False):
 
 def create_demo(model):
     with gr.Row():
-        image = gr.Image(label="Input Image", type='pil')
+        image_mesh = gr.Image(label="Input Mesh Image", type='pil')
+        image_texture= gr.Image(label="Input Texture Image", type='pil')
         result = gr.Model3D(label="3d mesh reconstruction", clear_color=[
                                                  1.0, 1.0, 1.0, 1.0])
     
     checkbox = gr.Checkbox(label="Keep occlusion edges", value=False)
     submit = gr.Button("Submit", variant="primary")
-    submit.click(partial(get_mesh, model), inputs=[image, checkbox], outputs=[result])
+    submit.click(partial(get_mesh, model), inputs=[image_mesh, image_texture, checkbox ], outputs=[result])
     examples = gr.Examples(examples=["examples/example1.png", "examples/example2.png", "examples/example3.png", "examples/example4.png", "examples/example5.png"],
-                            inputs=[image])
-
+                            inputs=[image_mesh])
