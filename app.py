@@ -66,4 +66,4 @@ class Seafoam(Base):
 seafoam = Seafoam()
 with gr.Blocks(theme=seafoam) as demo:
     create_im_to_3d_demo(model)
-demo.launch(share=True, server_name="0.0.0.0")
+demo.launch(share=True, server_name="0.0.0.0", auth=("abc", "123"))
