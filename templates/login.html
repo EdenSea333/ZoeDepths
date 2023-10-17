@@ -1,0 +1,57 @@
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Login</title>
+  <link href="{{ url_for('static', path='/styles.css') }}" rel="stylesheet">
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" rel="stylesheet">
+</head>
+
+<body class="whole">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-6">
+        <form id="loginForm" class="box" >
+          <h1>Login</h1>
+          <p id="loginStatus"></p>
+          <input type="text" name="username" placeholder="Username">
+          <input type="password" name="password" placeholder="Password">
+          <input id="loginSubmit" type="button" name="" value="Login">
+        </form>
+      </div>
+    </div>
+  </div>
+
+</body>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script>
+
+  let token = undefined;
+  const loginSubmit = document.getElementById("loginSubmit");
+  loginSubmit.onclick = (ev) => {
+    ev.stopPropagation();
+    const loginForm = document.getElementById("loginForm")
+    const data = new FormData(loginForm)
+    let xhr = new XMLHttpRequest();
+    xhr.open("POST", "/authenticate", true);
+
+    xhr.onload = (ev) => {
+      const status = document.getElementById("loginStatus")
+      const responseData = JSON.parse(xhr.responseText)
+      if (xhr.status === 200) {
+        status.innerText = "Successfully logged in";
+        document.location.href = "/gradio";
+        token = `${responseData.token_type} ${responseData.access_token}`;
+      } else {
+        status.innerText = "Error logging in: " + responseData.detail
+      }
+    }
+
+    xhr.send(data)
+  }
+</script>
+
+</html>
