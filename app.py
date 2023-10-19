@@ -65,7 +65,5 @@ def init():
             )
 
     seafoam = Seafoam()
-    with gr.Blocks(theme=seafoam, css="footer {display: none !important;}") as demo:
-        create_im_to_3d_demo(model)
-    return demo
+    return create_im_to_3d_demo(model, seafoam)
     # demo.launch(share=True, server_name="0.0.0.0")
